@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+}
+
+/* Cyber Circuit Background Grid */
+.cyber-grid-bg {
+  background-color: #0b0f19;
+  background-image: 
+    linear-gradient(to right, rgba(42, 59, 94, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(42, 59, 94, 0.25) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.light .cyber-grid-bg {
+  background-color: #f8fafc;
+  background-image: 
+    linear-gradient(to right, rgba(203, 213, 225, 0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(203, 213, 225, 0.5) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.3);
+  border-radius: 3px;
+}
