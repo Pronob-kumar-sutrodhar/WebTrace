@@ -11,11 +11,11 @@ export default function DsaExplainer({ isOpen, onClose }) {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-cyber-border pb-3">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-cyan-500 text-white flex items-center justify-center border border-cyan-400/30">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center border border-cyan-400/30">
               <Network className="w-4 h-4 text-cyan-200" />
             </div>
             <div>
-              <h3 className="text-sm font-pixel text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-300">
+              <h3 className="text-sm font-pixel text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
                 DSA CONCEPT GUIDE
               </h3>
               <p className="text-xs text-slate-400 font-sans mt-0.5">Core Algorithm & Data Structure Invariants</p>
@@ -34,7 +34,7 @@ export default function DsaExplainer({ isOpen, onClose }) {
           
           <div className="p-4 rounded-xl bg-cyber-surface/60 border border-cyber-border space-y-1.5">
             <div className="flex items-center gap-2 font-semibold text-slate-100 text-xs">
-              <Layers className="w-4 h-4 text-violet-400" />
+              <Layers className="w-4 h-4 text-cyan-400" />
               <span>1. FIFO Queue (collections.deque) — Breadth-First Search</span>
             </div>
             <p className="text-slate-400">
@@ -54,11 +54,11 @@ export default function DsaExplainer({ isOpen, onClose }) {
 
           <div className="p-4 rounded-xl bg-cyber-surface/60 border border-cyber-border space-y-1.5">
             <div className="flex items-center gap-2 font-semibold text-slate-100 text-xs">
-              <GitBranch className="w-4 h-4 text-purple-400" />
+              <GitBranch className="w-4 h-4 text-teal-400" />
               <span>3. Adjacency List (LinkGraph) — O(|V| + |E|) Space Complexity</span>
             </div>
             <p className="text-slate-400">
-              Stores website link connections as a dictionary mapping each page to its outgoing targets. Maximally memory-efficient for sparse web graphs where <code className="font-mono text-purple-300">|E| &lt;&lt; |V|²</code>.
+              Stores website link connections as a dictionary mapping each page to its outgoing targets. Maximally memory-efficient for sparse web graphs where <code className="font-mono text-teal-300">|E| &lt;&lt; |V|²</code>.
             </p>
           </div>
 
@@ -78,7 +78,7 @@ export default function DsaExplainer({ isOpen, onClose }) {
         <div className="pt-2 flex justify-end">
           <button 
             onClick={onClose}
-            className="px-5 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-xs rounded-full transition shadow-lg shadow-violet-600/30 uppercase tracking-wider"
+            className="px-5 py-2 bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-300 hover:to-cyan-400 text-slate-950 font-bold text-xs rounded-full transition shadow-lg shadow-cyan-400/30 uppercase tracking-wider"
           >
             Close
           </button>

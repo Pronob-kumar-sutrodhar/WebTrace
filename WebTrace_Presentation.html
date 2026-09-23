@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebTrace — DSA Presentation Deck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #070a13;
+      color: #f1f5f9;
+    }
+    code, pre {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .slide {
+      display: none;
+      min-height: 80vh;
+    }
+    .slide.active {
+      display: flex;
+    }
+    .cyber-card {
+      background: rgba(22, 32, 54, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      backdrop-filter: blur(12px);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 35px -5px rgba(0, 240, 255, 0.25);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-6">
+
+  <!-- Top Navigation Header -->
+  <header class="max-w-7xl w-full mx-auto flex items-center justify-between py-3 border-b border-slate-800/80">
+    <div class="flex items-center gap-3">
+      <span class="px-2.5 py-1 bg-cyan-950 border border-cyan-500/40 text-cyan-400 font-mono text-xs rounded-md font-semibold tracking-wider">
+        ECE 2103
+      </span>
+      <h1 class="text-sm font-bold text-slate-200 tracking-wide font-mono">
+        WEBTRACE : PRESENTATION DECK
+      </h1>
+    </div>
+    <div class="flex items-center gap-3 text-xs font-mono">
+      <span id="slide-indicator" class="text-cyan-400 font-bold">Slide 1 / 13</span>
+      <button onclick="toggleNotes()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition">
+        Toggle Speaker Notes (N)
+      </button>
+    </div>
+  </header>
+
+  <!-- Slide Viewport -->
+  <main class="max-w-7xl w-full mx-auto flex-1 flex flex-col justify-center my-6">
+
+    <!-- SLIDE 1 -->
+    <div class="slide active flex-col justify-center items-center text-center cyber-card rounded-2xl p-12 glow-cyan" data-slide="1">
+      <div class="inline-block px-4 py-1.5 bg-cyan-950/60 border border-cyan-400/40 text-cyan-300 text-xs font-mono rounded-full mb-6 font-semibold uppercase tracking-widest">
+        ECE 2103 — Data Structures & Algorithms Course Project
+      </div>
+      <h2 class="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-200 to-indigo-300 mb-4 tracking-tight">
+        WebTrace
+      </h2>
+      <p class="text-lg md:text-xl text-emerald-400 font-medium max-w-3xl mb-8">
+        Domain-Restricted Breadth-First Web Crawler & Graph Topology Engine
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl text-left text-xs font-mono">
+        <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+          <span class="text-cyan-400 font-bold block mb-1">• First-Principles DSA</span>
+          Custom Vector, Binary Min-Heap, BST, and LinkGraph built from scratch in Python 3.
+        </div>
+        <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+          <span class="text-purple-400 font-bold block mb-1">• Invariant Guarantees</span>
+          Strict FIFO queue discipline, discovery-time cycle prevention, and canonical URL hashing.
+        </div>
+        <div class="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
+          <span class="text-emerald-400 font-bold block mb-1">• Full-Stack System</span>
+          Dijkstra shortest paths, CSV/JSON serialization, Flask REST API & React visual network.
+        </div>
+      </div>
+      <div class="speaker-notes hidden mt-8 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400 text-left max-w-3xl">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        Welcome everyone. Today I am presenting WebTrace, a domain-restricted breadth-first web crawler built as a comprehensive capstone project for ECE 2103: Data Structures and Algorithms. Rather than relying on high-level crawling libraries, WebTrace implements core data structures like dynamic arrays, binary min-heaps, binary search trees, and adjacency list graphs from scratch to solve real-world web discovery problems with strict mathematical invariants.
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="2">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • PROJECT PURPOSE</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-6">Why Build a Web Crawler DSA-First?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+        <div class="p-6 bg-slate-900/70 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="text-cyan-400 font-bold text-sm">1. The Real-World Engineering Problem</h3>
+          <ul class="text-xs text-slate-300 space-y-2.5">
+            <li>• <strong>Web as a Directed Graph:</strong> The World Wide Web is an unbounded, cyclic directed graph G = (V, E) of pages and hyperlinks.</li>
+            <li>• <strong>Systematic Search:</strong> Search engines require exhaustive traversal within domain boundaries without falling into infinite cyclic traps.</li>
+            <li>• <strong>Shortest-Path Discovery:</strong> BFS guarantees discovering pages in strictly increasing order of click distance from the seed.</li>
+            <li>• <strong>Ethical Scraping:</strong> Requires O(1) robots.txt policy lookups and timestamp-based polite rate limiting.</li>
+          </ul>
+        </div>
+        <div class="p-6 bg-slate-900/70 rounded-xl border border-slate-800 space-y-3">
+          <h3 class="text-emerald-400 font-bold text-sm">2. Why DSA-First vs High-Level Libraries?</h3>
+          <ul class="text-xs text-slate-300 space-y-2.5">
+            <li>• <strong>Black-Box Abstractions:</strong> Libraries like Scrapy or urllib hide queue discipline, pointer manipulation, and memory resizing.</li>
+            <li>• <strong>First-Principles Mastery:</strong> Custom classes expose exact memory invariants, time complexities, and performance trade-offs.</li>
+            <li>• <strong>Strict Invariants:</strong> Enforces FIFO frontier order, instant discovery marking, and canonical URL normalization.</li>
+            <li>• <strong>Pedagogical Bridge:</strong> Directly connects textbook theory (Linear Arrays, Heaps, BSTs, Graphs) to production software.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        The motivation behind WebTrace is twofold. Mathematically, the web is an unbounded directed graph, and exploring it requires rigorous graph traversal and cycle prevention. Computationally, standard scraping libraries abstract away how memory, queues, and sets actually function under the hood. By building WebTrace DSA-first, we implement and verify every data structure directly, ensuring complete control over algorithmic invariants.
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="3">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • CUSTOM DATA STRUCTURES</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-6">Textbook Data Structures Implemented (structures.py & graph.py)</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-1.5">
+          <div class="flex justify-between items-center">
+            <h3 class="text-cyan-400 font-bold text-sm">Vector[T] (Linear Dynamic Array)</h3>
+            <span class="text-[10px] font-mono text-slate-400">structures.py:31–164</span>
+          </div>
+          <p class="text-xs text-slate-300">• <strong>Memory Layout:</strong> Contiguous buffer with initial capacity 8; doubles on overflow.</p>
+          <p class="text-xs text-slate-300">• <strong>Amortized O(1):</strong> push_back() achieves amortized constant time; O(1) index access.</p>
+          <p class="text-xs text-slate-300">• <strong>Algorithms:</strong> Linear Search O(N) and Binary Search O(log N) on sorted items.</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-1.5">
+          <div class="flex justify-between items-center">
+            <h3 class="text-purple-400 font-bold text-sm">MinHeapPriorityQueue[T] (Binary Min-Heap)</h3>
+            <span class="text-[10px] font-mono text-slate-400">structures.py:184–268</span>
+          </div>
+          <p class="text-xs text-slate-300">• <strong>Array Math:</strong> Parent(i)=(i-1)//2, Left=2i+1, Right=2i+2. Zero pointer overhead.</p>
+          <p class="text-xs text-slate-300">• <strong>Min-Heap Invariant:</strong> Parent priority <= Child priority; peek() in O(1) time.</p>
+          <p class="text-xs text-slate-300">• <strong>Heapify:</strong> push() with _sift_up O(log N), pop() with _sift_down O(log N).</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-1.5">
+          <div class="flex justify-between items-center">
+            <h3 class="text-emerald-400 font-bold text-sm">BinarySearchTree[T] (Linked BST)</h3>
+            <span class="text-[10px] font-mono text-slate-400">structures.py:284–427</span>
+          </div>
+          <p class="text-xs text-slate-300">• <strong>Node Architecture:</strong> Linked representation with key, value, left, and right pointers.</p>
+          <p class="text-xs text-slate-300">• <strong>3-Case Deletion:</strong> Handles leaf node, 1 child, and 2 children via in-order successor.</p>
+          <p class="text-xs text-slate-300">• <strong>In-Order Traversal:</strong> Left -> Root -> Right yields lexicographically sorted page records.</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-1.5">
+          <div class="flex justify-between items-center">
+            <h3 class="text-orange-400 font-bold text-sm">LinkGraph & Dijkstra's Algorithm</h3>
+            <span class="text-[10px] font-mono text-slate-400">graph.py:32–220</span>
+          </div>
+          <p class="text-xs text-slate-300">• <strong>Adjacency List:</strong> dict[str, list[str]] requiring O(|V| + |E|) space vs O(|V|^2) matrix.</p>
+          <p class="text-xs text-slate-300">• <strong>Edge Deduplication:</strong> Helper set table enforces O(1) parallel edge deduplication.</p>
+          <p class="text-xs text-slate-300">• <strong>Dijkstra Engine:</strong> Greedy shortest weighted path using MinHeapPriorityQueue in O((V+E)log V).</p>
+        </div>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        In structures.py and graph.py, we built four core data structures directly aligned with the syllabus. The Vector simulates contiguous memory management and dynamic resizing. The Min-Heap implements array-based complete binary trees for Dijkstra's shortest path algorithm. The BST provides key-value page indexing with all three deletion cases, and LinkGraph models the web as an adjacency list graph requiring optimal O(|V| + |E|) space.
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="4">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • TRAVERSAL INVARIANTS</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-6">Frontier Discipline & Key Algorithmic Invariants</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2.5">
+          <h3 class="text-cyan-400 font-bold text-sm">1. FIFO Frontier Queue</h3>
+          <p class="text-[11px] font-mono text-slate-400">crawler.py:99 • collections.deque</p>
+          <p class="text-xs text-slate-300">• <strong>FIFO Discipline:</strong> Append to rear, popleft from front (both O(1)).</p>
+          <p class="text-xs text-slate-300">• <strong>Level-Order Invariant:</strong> All pages at depth d are visited before depth d + 1.</p>
+          <p class="text-xs text-slate-300">• <strong>Shortest Hop Path:</strong> Guarantees minimum click path from seed URL.</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2.5">
+          <h3 class="text-purple-400 font-bold text-sm">2. Visited Tracking & Cycles</h3>
+          <p class="text-[11px] font-mono text-slate-400">crawler.py:100, 184–192 • Vector & Set</p>
+          <p class="text-xs text-slate-300">• <strong>Cycle Prevention:</strong> Prunes cyclic loops (A -> B -> A) and self-links.</p>
+          <p class="text-xs text-slate-300">• <strong>Discovery Timing:</strong> Marked visited IMMEDIATELY upon discovery, not dequeue, eliminating duplicate queue bloat.</p>
+          <p class="text-xs text-slate-300">• <strong>Domain Boundary:</strong> Enforces subgraph restriction via is_same_domain().</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2.5">
+          <h3 class="text-emerald-400 font-bold text-sm">3. Hash Caching & URL Normalization</h3>
+          <p class="text-[11px] font-mono text-slate-400">fetcher.py:72–74 • url_utils.py:83–160</p>
+          <p class="text-xs text-slate-300">• <strong>robots.txt Cache:</strong> Caches parsed policies per domain root for O(1) check.</p>
+          <p class="text-xs text-slate-300">• <strong>Politeness Map:</strong> Tracks last request time to enforce delay interval.</p>
+          <p class="text-xs text-slate-300">• <strong>Canonical Invariant:</strong> Normalizes scheme, port, and fragments (#) so identical pages share identical hash keys.</p>
+        </div>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        Crucial to any graph traversal are its invariant rules. The FIFO queue ensures BFS level-order traversal, guaranteeing shortest hop paths. The visited tracking mechanism must mark vertices upon discovery rather than expansion; otherwise, a dense mesh would cause exponential queue bloat. Finally, URL normalization guarantees that semantically identical pages produce identical hash keys in our lookup maps.
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="5">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • ARCHITECTURE</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-4">Project Architecture & Module Responsibility</h2>
+      <div class="overflow-x-auto flex-1">
+        <table class="w-full text-left text-xs border border-slate-800 rounded-lg overflow-hidden">
+          <thead class="bg-slate-900 text-cyan-400 font-mono">
+            <tr>
+              <th class="p-2.5 border-b border-slate-800">Module / File</th>
+              <th class="p-2.5 border-b border-slate-800">Core DSA / Mechanism</th>
+              <th class="p-2.5 border-b border-slate-800">Responsibility & Architectural Role</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]">
+            <tr class="bg-slate-950/40">
+              <td class="p-2.5 text-cyan-300 font-bold">webtrace/structures.py</td>
+              <td class="p-2.5 text-emerald-400">Linear Array, Min-Heap, BST</td>
+              <td class="p-2.5 text-slate-300 font-sans">Textbook custom Vector, MinHeapPriorityQueue, and BinarySearchTree.</td>
+            </tr>
+            <tr class="bg-slate-900/30">
+              <td class="p-2.5 text-cyan-300 font-bold">webtrace/graph.py</td>
+              <td class="p-2.5 text-emerald-400">Adjacency List & Dijkstra</td>
+              <td class="p-2.5 text-slate-300 font-sans">LinkGraph representation, edge deduplication, Dijkstra shortest path.</td>
+            </tr>
+            <tr class="bg-slate-950/40">
+              <td class="p-2.5 text-cyan-300 font-bold">webtrace/crawler.py</td>
+              <td class="p-2.5 text-emerald-400">FIFO Queue, Visited Set, BFS</td>
+              <td class="p-2.5 text-slate-300 font-sans">Main orchestrator; BFS loop, depth control, page & BST indexing.</td>
+            </tr>
+            <tr class="bg-slate-900/30">
+              <td class="p-2.5 text-cyan-300 font-bold">webtrace/fetcher.py</td>
+              <td class="p-2.5 text-emerald-400">Hash Map Caching & State</td>
+              <td class="p-2.5 text-slate-300 font-sans">HTTP GET session, robots.txt caching, domain politeness delay.</td>
+            </tr>
+            <tr class="bg-slate-950/40">
+              <td class="p-2.5 text-cyan-300 font-bold">webtrace/url_utils.py</td>
+              <td class="p-2.5 text-emerald-400">String Parsing & Normalization</td>
+              <td class="p-2.5 text-slate-300 font-sans">Canonical URL normalization, fragment stripping, same-domain checks.</td>
+            </tr>
+            <tr class="bg-slate-900/30">
+              <td class="p-2.5 text-cyan-300 font-bold">webtrace/parser.py</td>
+              <td class="p-2.5 text-emerald-400">DOM Parsing & Tokenization</td>
+              <td class="p-2.5 text-slate-300 font-sans">BeautifulSoup text, anchor links, document downloads, and quotes extractor.</td>
+            </tr>
+            <tr class="bg-slate-950/40">
+              <td class="p-2.5 text-cyan-300 font-bold">webtrace/exporter.py</td>
+              <td class="p-2.5 text-emerald-400">CSV & JSON Serialization</td>
+              <td class="p-2.5 text-slate-300 font-sans">Serializes BFS search tree to CSV and graph adjacency list to JSON.</td>
+            </tr>
+            <tr class="bg-slate-900/30">
+              <td class="p-2.5 text-cyan-300 font-bold">webtrace/app.py</td>
+              <td class="p-2.5 text-emerald-400">Flask REST API & Server</td>
+              <td class="p-2.5 text-slate-300 font-sans">Serves compiled React UI and exposes /api/crawl, /shortest-path, /bst-inorder.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        Here is the modular architecture of the codebase. Each file owns a clear, single responsibility. The crawler coordinates the queue and visited state; structures.py provides textbook data structures; graph.py maintains the adjacency list; and fetcher.py and url_utils.py handle network politeness and string canonicalization. The system also includes a Flask server and React frontend for interactive visual analysis.
+      </div>
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="6">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • EXECUTION PIPELINE</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-6">Crawler Execution Lifecycle: End-to-End BFS Pipeline</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 text-xs">
+        <div class="space-y-3">
+          <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+            <span class="text-cyan-400 font-bold block mb-0.5">1. Input & Normalization</span>
+            Canonicalize seed URL (strip fragments, lowercase scheme/host, standardize trailing slash).
+          </div>
+          <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+            <span class="text-cyan-400 font-bold block mb-0.5">2. Frontier Initialization</span>
+            Enqueue CrawlTask(seed, depth=0); mark in Visited Vector; insert root node in LinkGraph.
+          </div>
+          <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+            <span class="text-cyan-400 font-bold block mb-0.5">3. FIFO Dequeue (popleft)</span>
+            Pops pending task from front of queue, guaranteeing strict level-order BFS traversal.
+          </div>
+          <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+            <span class="text-cyan-400 font-bold block mb-0.5">4. Boundary & Politeness Check</span>
+            If depth > max_depth, skip. Consult robots.txt hash map; sleep if politeness delay active.
+          </div>
+          <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+            <span class="text-cyan-400 font-bold block mb-0.5">5. Fetch & Measure Latency</span>
+            HTTP GET page; measure elapsed network time (ms) as edge weight for Dijkstra shortest paths.
+          </div>
+        </div>
+        <div class="space-y-3">
+          <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+            <span class="text-emerald-400 font-bold block mb-0.5">6. Tokenize & Extract HTML</span>
+            Extract page title, text blocks, quote elements, download documents (PDF/ZIP), and anchor hrefs.
+          </div>
+          <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+            <span class="text-emerald-400 font-bold block mb-0.5">7. Domain Filter & Edge Insertion</span>
+            Discard off-domain URLs. For internal links, add directed edge (u -> v, weight=ms) into LinkGraph.
+          </div>
+          <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+            <span class="text-emerald-400 font-bold block mb-0.5">8. Discovery-Time Enqueue</span>
+            If norm_link not in visited: push_back into Visited Vector and append CrawlTask(norm_link, depth+1).
+          </div>
+          <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+            <span class="text-emerald-400 font-bold block mb-0.5">9. BST Lexicographical Indexing</span>
+            Insert CrawledPage record into BinarySearchTree keyed by canonical URL for O(log N) retrieval.
+          </div>
+          <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+            <span class="text-emerald-400 font-bold block mb-0.5">10. Serialization & Artifact Export</span>
+            Dump BFS tree metadata to crawled_pages.csv and complete adjacency list to link_graph.json.
+          </div>
+        </div>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        This pipeline represents the end-to-end lifecycle of a crawl task. We begin with URL canonicalization, initialize the FIFO queue, and enter the main BFS loop. For each dequeued URL, we respect robots.txt and politeness, record network latency for Dijkstra edge weights, parse outgoing links, add edges to the adjacency list, and immediately enqueue unseen domain-internal links. Finally, pages are indexed in a BST and serialized to disk.
+      </div>
+    </div>
+
+    <!-- SLIDE 7 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="7">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • REAL DELIVERABLES</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-6">Observed Project Outputs: CSV, JSON, API & React GUI</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-cyan-400 font-bold text-sm">1. Tabular Traversal CSV (crawled_pages.csv)</h3>
+          <p class="text-xs text-slate-400 font-mono">Columns: URL, Title, Depth, Parent URL, Outgoing Links, Snippet</p>
+          <div class="p-2.5 bg-slate-950 rounded font-mono text-[11px] text-slate-300 border border-slate-800">
+            https://example.com/, Example Domain, 0, —, 0<br>
+            https://example.com/about, About Us, 1, https://example.com/, 3<br>
+            https://example.com/products, Products, 1, https://example.com/, 2
+          </div>
+          <p class="text-xs text-slate-300">Enables BFS search tree reconstruction via parent pointers and click depth.</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-purple-400 font-bold text-sm">2. Adjacency List JSON (link_graph.json)</h3>
+          <p class="text-xs text-slate-400 font-mono">Format: dict[str, list[str]] serialized to disk</p>
+          <pre class="p-2.5 bg-slate-950 rounded font-mono text-[11px] text-emerald-400 border border-slate-800">
+{
+  "https://example.com/": [
+    "https://example.com/about",
+    "https://example.com/products"
+  ]
+}</pre>
+          <p class="text-xs text-slate-300">Serializes full directed graph topology for network analysis & PageRank.</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-emerald-400 font-bold text-sm">3. Real-Time REST API Endpoints</h3>
+          <ul class="text-xs text-slate-300 space-y-1">
+            <li>• <strong>POST /api/crawl:</strong> Triggers BFS crawl; returns pages, graph, and stats.</li>
+            <li>• <strong>POST /api/graph/shortest-path:</strong> Runs Dijkstra using Min-Heap priority queue.</li>
+            <li>• <strong>GET /api/pages/bst-inorder:</strong> Returns pages sorted alphabetically via BST.</li>
+          </ul>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-orange-400 font-bold text-sm">4. Interactive React & Tailwind Web GUI</h3>
+          <ul class="text-xs text-slate-300 space-y-1">
+            <li>• <strong>Visual Network Graph:</strong> Force-directed vis-network topology layout.</li>
+            <li>• <strong>Color Hierarchy:</strong> Violet = Seed (Depth 0), Cyan = Depth 1, Coral = Depth 2+.</li>
+            <li>• <strong>Content Viewer:</strong> Quotes, extracted text blocks, and downloadable files.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        WebTrace produces four distinct output modalities. First, crawled_pages.csv serializes the BFS search tree with parent links and depth levels. Second, link_graph.json serializes the complete directed adjacency list. Third, Flask provides endpoints for Dijkstra shortest paths and BST in-order sorting. Fourth, our React dashboard visualizes the graph topology with depth-coded color nodes.
+      </div>
+    </div>
+
+    <!-- SLIDE 8 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="8">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • WORKED TRACE EXAMPLE</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-4">Step-by-Step BFS Traversal Trace (Observed demo_bfs.py Data)</h2>
+      <div class="overflow-x-auto flex-1">
+        <table class="w-full text-left text-xs border border-slate-800 rounded-lg overflow-hidden">
+          <thead class="bg-slate-900 text-cyan-400 font-mono text-[11px]">
+            <tr>
+              <th class="p-2 border-b border-slate-800">Step</th>
+              <th class="p-2 border-b border-slate-800">URL Dequeued (popleft)</th>
+              <th class="p-2 border-b border-slate-800">Depth</th>
+              <th class="p-2 border-b border-slate-800">Action & Queue Frontier Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]">
+            <tr class="bg-slate-950/40">
+              <td class="p-2 text-cyan-400">0</td>
+              <td class="p-2 text-slate-400">Initial Enqueue</td>
+              <td class="p-2 text-slate-400">-</td>
+              <td class="p-2 text-slate-300 font-sans">Queue: [ / (d=0) ]. Visited: [ / ]</td>
+            </tr>
+            <tr class="bg-slate-900/30">
+              <td class="p-2 text-cyan-400">1</td>
+              <td class="p-2 text-emerald-400 font-bold">https://example.com/</td>
+              <td class="p-2 text-slate-300">0</td>
+              <td class="p-2 text-slate-300 font-sans">Discovers /about, /products, /contact. Queue: [ /about, /products, /contact ]</td>
+            </tr>
+            <tr class="bg-slate-950/40">
+              <td class="p-2 text-cyan-400">2</td>
+              <td class="p-2 text-emerald-400 font-bold">/about</td>
+              <td class="p-2 text-slate-300">1</td>
+              <td class="p-2 text-slate-300 font-sans">Discovers /team, /history. Ignores / (<span class="text-orange-400 font-bold">Cycle!</span>). Queue: [ /products, /contact, /team, /history ]</td>
+            </tr>
+            <tr class="bg-slate-900/30">
+              <td class="p-2 text-cyan-400">3</td>
+              <td class="p-2 text-emerald-400 font-bold">/products</td>
+              <td class="p-2 text-slate-300">1</td>
+              <td class="p-2 text-slate-300 font-sans">Discovers /software. Ignores /team (<span class="text-purple-400 font-bold">Cross-link!</span>). Queue: [ /contact, /team, /history, /software ]</td>
+            </tr>
+            <tr class="bg-slate-950/40">
+              <td class="p-2 text-cyan-400">4</td>
+              <td class="p-2 text-emerald-400 font-bold">/contact</td>
+              <td class="p-2 text-slate-300">1</td>
+              <td class="p-2 text-slate-300 font-sans">Leaf node. Queue: [ /team (d=2), /history (d=2), /software (d=2) ]</td>
+            </tr>
+            <tr class="bg-slate-900/30">
+              <td class="p-2 text-cyan-400">5</td>
+              <td class="p-2 text-emerald-400 font-bold">/about/team</td>
+              <td class="p-2 text-slate-300">2</td>
+              <td class="p-2 text-slate-300 font-sans">Depth = 2 (max_depth reached). Outgoing edges recorded but not enqueued.</td>
+            </tr>
+            <tr class="bg-slate-950/40">
+              <td class="p-2 text-cyan-400">6</td>
+              <td class="p-2 text-emerald-400 font-bold">/about/history</td>
+              <td class="p-2 text-slate-300">2</td>
+              <td class="p-2 text-slate-300 font-sans">Depth = 2. Crawl terminates cleanly with 7 total pages visited in level order.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        Here is an exact step-by-step trace from demo_bfs.py. Notice how the queue evolves in strict FIFO order: pages at depth 1 (about, products, contact) are dequeued before any depth 2 page. Crucially, when /about links back to / (a cycle), the visited check immediately prunes it. Similarly, when /products points to /about/team (a cross-link), it is recognized as already visited and never enqueued twice.
+      </div>
+    </div>
+
+    <!-- SLIDE 9 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="9">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • WORKED TRACE EXAMPLE</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-6">Dijkstra Shortest Path & BST Indexing Trace</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2.5">
+          <h3 class="text-purple-400 font-bold text-sm">Dijkstra Shortest Path Trace (test_syllabus_dsa.py)</h3>
+          <p class="text-xs text-slate-300">• <strong>Graph Setup:</strong> /home to /destination</p>
+          <div class="p-2.5 bg-slate-950 rounded font-mono text-[11px] text-slate-300 border border-slate-800">
+            Route A: /home ->(10ms)-> /fast_route ->(5ms)-> /dest  [15ms]<br>
+            Route B: /home ->(2ms)-> /slow_route ->(30ms)-> /dest [32ms]
+          </div>
+          <p class="text-xs text-slate-300">• <strong>Unweighted BFS:</strong> Sees both as 2 hops; cannot find the latency-optimal path.</p>
+          <p class="text-xs text-slate-300">• <strong>Min-Heap Extraction:</strong> 0ms (/home) -> 2ms (/slow) -> 10ms (/fast) -> 15ms (/dest).</p>
+          <p class="text-xs text-emerald-400 font-mono">• <strong>Optimal Path:</strong> ['/home', '/fast_route', '/destination'] (Cost: 15.0ms)</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2.5">
+          <h3 class="text-emerald-400 font-bold text-sm">BST In-Order Lexicographical Sorting</h3>
+          <p class="text-xs text-slate-300">• <strong>Arbitrary Insertion Sequence:</strong></p>
+          <div class="p-2 bg-slate-950 rounded font-mono text-[11px] text-slate-400 border border-slate-800">
+            /page_z, /page_a, /page_m, /page_b, /page_c
+          </div>
+          <p class="text-xs text-slate-300">• <strong>BST Invariant:</strong> Left subtree &lt; Root &lt; Right subtree.</p>
+          <p class="text-xs text-slate-300">• <strong>In-Order Traversal (Left -> Root -> Right):</strong></p>
+          <div class="p-2 bg-slate-950 rounded font-mono text-[11px] text-emerald-400 border border-slate-800">
+            /page_a, /page_b, /page_c, /page_m, /page_z
+          </div>
+          <p class="text-xs text-slate-300">• <strong>Linear Sorting:</strong> Yields strictly ascending lexicographical order in O(N) traversal time without external sorting!</p>
+        </div>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        This slide demonstrates the power of our custom data structures. In Dijkstra's algorithm, unweighted BFS would fail to distinguish between a fast 15-millisecond route and a slow 32-millisecond route because both take two hops. Our Min-Heap priority queue correctly selects the optimal weighted path. Meanwhile, the Binary Search Tree indexes pages as they are crawled, and an in-order traversal sorts them alphabetically in linear time without calling Python's sort.
+      </div>
+    </div>
+
+    <!-- SLIDE 10 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="10">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • COMPLEXITY ANALYSIS</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-4">Algorithmic Time & Space Complexity Analysis</h2>
+      <div class="overflow-x-auto flex-1">
+        <table class="w-full text-left text-xs border border-slate-800 rounded-lg overflow-hidden">
+          <thead class="bg-slate-900 text-cyan-400 font-mono text-[11px]">
+            <tr>
+              <th class="p-2 border-b border-slate-800">Operation / Step</th>
+              <th class="p-2 border-b border-slate-800">Data Structure</th>
+              <th class="p-2 border-b border-slate-800">Time Complexity</th>
+              <th class="p-2 border-b border-slate-800">Space Complexity</th>
+              <th class="p-2 border-b border-slate-800">Complexity Rationale</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 font-mono text-[11px]">
+            <tr class="bg-slate-950/40">
+              <td class="p-2 text-cyan-300">Frontier Enqueue / Dequeue</td>
+              <td class="p-2 text-slate-300">collections.deque</td>
+              <td class="p-2 text-emerald-400">O(1)</td>
+              <td class="p-2 text-orange-400">O(|V|)</td>
+              <td class="p-2 text-slate-300 font-sans">Doubly-linked block buffer; append and popleft take constant time.</td>
+            </tr>
+            <tr class="bg-slate-900/30">
+              <td class="p-2 text-cyan-300">Visited Check & Add</td>
+              <td class="p-2 text-slate-300">Vector / Hash Set</td>
+              <td class="p-2 text-emerald-400">O(1) avg</td>
+              <td class="p-2 text-orange-400">O(|V|)</td>
+              <td class="p-2 text-slate-300 font-sans">Hash table lookup of normalized URL string.</td>
+            </tr>
+            <tr class="bg-slate-950/40">
+              <td class="p-2 text-cyan-300">Edge Query & Insertion</td>
+              <td class="p-2 text-slate-300">LinkGraph (Adj List)</td>
+              <td class="p-2 text-emerald-400">O(1) avg</td>
+              <td class="p-2 text-orange-400">O(|V| + |E|)</td>
+              <td class="p-2 text-slate-300 font-sans">Dict hash table lookup with set deduplication.</td>
+            </tr>
+            <tr class="bg-slate-900/30">
+              <td class="p-2 text-cyan-300 font-bold">Overall BFS Crawl Loop</td>
+              <td class="p-2 text-slate-300">Queue + Set + Graph</td>
+              <td class="p-2 text-emerald-400 font-bold">O(|V| + |E|)</td>
+              <td class="p-2 text-orange-400 font-bold">O(|V| + |E|)</td>
+              <td class="p-2 text-slate-300 font-sans">Every node enqueued once; every outgoing edge traversed once.</td>
+            </tr>
+            <tr class="bg-slate-950/40">
+              <td class="p-2 text-cyan-300">Min-Heap Push / Pop</td>
+              <td class="p-2 text-slate-300">MinHeapPriorityQueue</td>
+              <td class="p-2 text-emerald-400">O(log N)</td>
+              <td class="p-2 text-orange-400">O(N)</td>
+              <td class="p-2 text-slate-300 font-sans">Sift-up and sift-down along complete binary tree height.</td>
+            </tr>
+            <tr class="bg-slate-900/30">
+              <td class="p-2 text-cyan-300 font-bold">Dijkstra Shortest Path</td>
+              <td class="p-2 text-slate-300">Min-Heap + Adj List</td>
+              <td class="p-2 text-emerald-400 font-bold">O((V + E) log V)</td>
+              <td class="p-2 text-orange-400 font-bold">O(|V|)</td>
+              <td class="p-2 text-slate-300 font-sans">Each edge relaxed once; heap key updates cost O(log V).</td>
+            </tr>
+            <tr class="bg-slate-950/40">
+              <td class="p-2 text-cyan-300">BST Search & Insert</td>
+              <td class="p-2 text-slate-300">BinarySearchTree</td>
+              <td class="p-2 text-emerald-400">O(log N) avg</td>
+              <td class="p-2 text-orange-400">O(N)</td>
+              <td class="p-2 text-slate-300 font-sans">Tree branch pruning; O(N) worst case if unbalanced.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        Here is the complete complexity breakdown. The overall BFS crawl runs in optimal O(|V| + |E|) time and space, because each reachable page is visited once and each hyperlink is traversed once. Our custom Min-Heap operations run in O(log N) time, powering Dijkstra's algorithm in O((V + E) log V). The Adjacency List requires only O(|V| + |E|) space, making it dramatically superior to an O(|V|^2) matrix for sparse web graphs.
+      </div>
+    </div>
+
+    <!-- SLIDE 11 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="11">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • VIVA VOCE Q&A</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-6">Examiner Viva Voce Q&A: Traversal & Graph Theory</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 text-xs">
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-cyan-400 font-bold">Q1: Why choose BFS over DFS for a web crawler?</h3>
+          <p class="text-slate-300">• <strong>BFS:</strong> Discovers pages in order of shortest click-depth from root.</p>
+          <p class="text-slate-300">• <strong>DFS Trap:</strong> DFS gets trapped down infinite deep branches (dynamic calendar links, infinite pagination), missing peer pages.</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-purple-400 font-bold">Q2: Why an Adjacency List over an Adjacency Matrix?</h3>
+          <p class="text-slate-300">• <strong>Space Bound:</strong> O(|V| + |E|) space vs O(|V|^2) matrix.</p>
+          <p class="text-slate-300">• <strong>Web Sparsity:</strong> Since |E| &lt;&lt; |V|^2, a matrix with 10,000 pages would waste 100M entries. Neighbor iteration takes O(deg(u)) vs O(|V|).</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-emerald-400 font-bold">Q3: Why must URLs be canonicalized before hashing?</h3>
+          <p class="text-slate-300">• <strong>Collision Invariant:</strong> Distinct URL strings can refer to the same document (fragments #, uppercase host, relative paths).</p>
+          <p class="text-slate-300">• <strong>Impact:</strong> Without normalization, visited sets store duplicate keys, causing redundant network fetches and infinite cycles.</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-orange-400 font-bold">Q4: When is a URL marked visited—discovery or expansion?</h3>
+          <p class="text-slate-300">• <strong>Discovery Time:</strong> Must be marked visited IMMEDIATELY upon discovery (before enqueuing).</p>
+          <p class="text-slate-300">• <strong>Exponential Trap:</strong> If delayed until dequeue, parallel paths enqueue the same URL dozens of times, causing exponential frontier bloat.</p>
+        </div>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        Examiners frequently ask these four questions during viva voce evaluations. The key points to emphasize are: BFS guarantees shortest click paths whereas DFS gets lost down infinite branches; the Adjacency List is optimal because the web graph is sparse; URL canonicalization protects the hash set's deduplication invariant; and marking visited at discovery prevents exponential queue bloat.
+      </div>
+    </div>
+
+    <!-- SLIDE 12 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="12">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • VIVA VOCE Q&A</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-6">Examiner Viva Voce Q&A: Custom Data Structures & Dijkstra</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 text-xs">
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-cyan-400 font-bold">Q5: How does Min-Heap map a tree into a linear array?</h3>
+          <p class="text-slate-300">• <strong>Index Formula:</strong> Parent(i)=(i-1)//2, Left=2i+1, Right=2i+2.</p>
+          <p class="text-slate-300">• <strong>Complete Tree:</strong> Levels fill left-to-right with zero internal array gaps. Provides superior CPU cache locality and zero pointer overhead.</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-purple-400 font-bold">Q6: How does BST deletion handle two children?</h3>
+          <p class="text-slate-300">• <strong>In-Order Successor:</strong> Finds smallest node in right subtree (_find_min).</p>
+          <p class="text-slate-300">• <strong>Value Swap & Recurse:</strong> Copies successor key/value into the deleted node, then recursively deletes the successor from the right subtree.</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-emerald-400 font-bold">Q7: How does Dijkstra differ from unweighted BFS here?</h3>
+          <p class="text-slate-300">• <strong>Hop vs Latency:</strong> Unweighted BFS assumes uniform edge weights. Web requests have varying latencies.</p>
+          <p class="text-slate-300">• <strong>Min-Heap Routing:</strong> Explores paths by cumulative minimum latency, finding the fastest route rather than just fewest hops.</p>
+        </div>
+        <div class="p-5 bg-slate-900/70 rounded-xl border border-slate-800 space-y-2">
+          <h3 class="text-orange-400 font-bold">Q8: How does WebTrace ensure polite crawling?</h3>
+          <p class="text-slate-300">• <strong>robots.txt Cache:</strong> Caches parsed RobotFileParser instances per domain in a hash map to avoid redundant network queries.</p>
+          <p class="text-slate-300">• <strong>Politeness Delay:</strong> Enforces time.sleep() if elapsed time since last domain request &lt; delay threshold.</p>
+        </div>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        These technical questions evaluate data structure implementation specifics. Be ready to write the binary heap array math: parent is (i-1)//2 and left is 2i+1. For BST deletion with two children, explain that we replace the node with its in-order successor. Contrast BFS hop counting with Dijkstra's latency-weighted routing, and highlight our hash map caching for robots.txt politeness.
+      </div>
+    </div>
+
+    <!-- SLIDE 13 -->
+    <div class="slide flex-col cyber-card rounded-2xl p-8" data-slide="13">
+      <div class="text-xs font-mono text-cyan-400 font-bold uppercase mb-2">ECE 2103 • CONCLUSION</div>
+      <h2 class="text-2xl font-bold text-slate-100 mb-6">Summary & Project Takeaways</h2>
+      <div class="p-6 bg-slate-900/70 rounded-xl border border-slate-800 space-y-4 flex-1 text-xs">
+        <div class="flex items-start gap-3">
+          <span class="px-2 py-0.5 bg-cyan-950 text-cyan-400 font-mono rounded font-bold">1</span>
+          <div>
+            <strong class="text-slate-100">Full Syllabus Integration:</strong>
+            <p class="text-slate-300">Successfully unified Vector (Linear Array), MinHeapPriorityQueue, BinarySearchTree, and LinkGraph (Adjacency List) in Python 3.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="px-2 py-0.5 bg-cyan-950 text-cyan-400 font-mono rounded font-bold">2</span>
+          <div>
+            <strong class="text-slate-100">Algorithmic Rigor & Correctness:</strong>
+            <p class="text-slate-300">Enforced strict BFS level-order traversal, discovery-time cycle prevention, canonical URL hashing, and Dijkstra's shortest path.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="px-2 py-0.5 bg-cyan-950 text-cyan-400 font-mono rounded font-bold">3</span>
+          <div>
+            <strong class="text-slate-100">Comprehensive Automated Verification:</strong>
+            <p class="text-slate-300">Verified through 52 automated pytest test cases covering heap sift-up/down, BST 3-case deletion, and crawler boundary constraints.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="px-2 py-0.5 bg-cyan-950 text-cyan-400 font-mono rounded font-bold">4</span>
+          <div>
+            <strong class="text-slate-100">Real-World Software Engineering:</strong>
+            <p class="text-slate-300">Exports CSV and JSON artifacts, exposes REST API endpoints, and delivers an interactive React + Tailwind cyber dashboard.</p>
+          </div>
+        </div>
+      </div>
+      <div class="speaker-notes hidden mt-4 p-4 bg-slate-950 border border-cyan-500/30 rounded-xl text-xs text-slate-400">
+        <strong class="text-cyan-400 block mb-1 font-mono">SPEAKER NOTES:</strong>
+        In conclusion, WebTrace bridges theoretical Computer Science and practical software engineering. By implementing arrays, heaps, binary search trees, and adjacency lists from scratch, we verified how core data structure invariants guarantee correct, optimal, and cycle-free graph traversal. Thank you, and I am now ready to take any questions.
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Navigation Controller -->
+  <footer class="max-w-7xl w-full mx-auto flex items-center justify-between py-3 border-t border-slate-800/80 text-xs font-mono text-slate-400">
+    <div>
+      <span>Use <kbd class="px-1.5 py-0.5 bg-slate-800 text-slate-200 rounded">←</kbd> / <kbd class="px-1.5 py-0.5 bg-slate-800 text-slate-200 rounded">→</kbd> or buttons to navigate</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="prevSlide()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded font-semibold transition border border-slate-700">
+        Previous
+      </button>
+      <button onclick="nextSlide()" class="px-4 py-1.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 rounded font-bold transition shadow-lg shadow-cyan-500/20">
+        Next
+      </button>
+    </div>
+  </footer>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 13;
+
+    function showSlide(n) {
+      if (n < 1) n = 1;
+      if (n > totalSlides) n = totalSlides;
+      currentSlide = n;
+
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      const active = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
+      if (active) active.classList.add('active');
+
+      document.getElementById('slide-indicator').innerText = `Slide ${currentSlide} / ${totalSlides}`;
+    }
+
+    function prevSlide() { showSlide(currentSlide - 1); }
+    function nextSlide() { showSlide(currentSlide + 1); }
+
+    function toggleNotes() {
+      document.querySelectorAll('.speaker-notes').forEach(el => {
+        el.classList.toggle('hidden');
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'n' || e.key === 'N') {
+        toggleNotes();
+      }
+    });
+  </script>
+</body>
+</html>

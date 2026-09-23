@@ -76,14 +76,14 @@ export default function ContentsView({ pages }) {
       {/* Header with Title and Global Search */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-cyber-border pb-4">
         <div>
-          <h3 className="text-sm font-pixel text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-300 flex items-center gap-2">
+          <h3 className="text-sm font-pixel text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 flex items-center gap-2">
             <FileText className="w-4 h-4 text-cyan-400" />
             EXTRACTED CONTENTS
           </h3>
           <p className="text-xs text-slate-400 font-sans mt-0.5">
             Retrieved <span className="font-semibold text-cyan-300">{totals.text}</span> text blocks,{' '}
             <span className="font-semibold text-amber-300">{totals.docs}</span> documents, and{' '}
-            <span className="font-semibold text-violet-300">{totals.urls}</span> URLs across{' '}
+            <span className="font-semibold text-cyan-300">{totals.urls}</span> URLs across{' '}
             <span className="font-semibold text-slate-200">{pages ? pages.length : 0}</span> crawled pages.
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function ContentsView({ pages }) {
           onClick={() => setCategoryFilter('all')}
           className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition ${
             categoryFilter === 'all'
-              ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-600/30'
+              ? 'bg-gradient-to-r from-cyan-400 to-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-400/30'
               : 'bg-cyber-surface hover:bg-cyber-card text-slate-300 border border-cyber-border'
           }`}
         >
@@ -144,7 +144,7 @@ export default function ContentsView({ pages }) {
           onClick={() => setCategoryFilter('urls')}
           className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition ${
             categoryFilter === 'urls'
-              ? 'bg-purple-500 text-white shadow-md shadow-purple-500/30'
+              ? 'bg-blue-500 text-white shadow-md shadow-blue-500/30'
               : 'bg-cyber-surface hover:bg-cyber-card text-slate-300 border border-cyber-border'
           }`}
         >
@@ -258,7 +258,7 @@ export default function ContentsView({ pages }) {
                 {/* 3. Discovered URLs Section */}
                 {showUrls && page.filteredUrls && page.filteredUrls.length > 0 && (
                   <div className="space-y-2 pt-2 border-t border-cyber-border/30">
-                    <span className="font-pixel text-[10px] text-purple-400 uppercase tracking-wider block flex items-center gap-1.5">
+                    <span className="font-pixel text-[10px] text-cyan-400 uppercase tracking-wider block flex items-center gap-1.5">
                       <Link2 className="w-3 h-3" />
                       Discovered URLs on this page ({page.filteredUrls.length}):
                     </span>

@@ -28,11 +28,13 @@ DSA Concepts Demonstrated:
 from collections import deque
 from dataclasses import dataclass, field
 import logging
+import time
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 from webtrace.fetcher import Fetcher
 from webtrace.graph import LinkGraph
 from webtrace.parser import extract_comprehensive_page_data
+from webtrace.structures import BinarySearchTree, Vector
 from webtrace.url_utils import is_same_domain, normalize_url
 
 logger = logging.getLogger("webtrace.crawler")
@@ -90,13 +92,15 @@ class WebCrawler:
         # ----------------------------------------------------------------------
         # DSA Structures:
         # 1. Queue: Holds pending CrawlTasks (FIFO order ensures BFS)
-        # 2. Set: Tracks all discovered URLs for O(1) duplicate prevention
+        # 2. Vector: Linear Array / Dynamic Array for visited tracking (ECE 2103)
         # 3. LinkGraph: Adjacency list storing the website's directed graph
+        # 4. BST: Binary Search Tree indexing crawled pages lexicographically
         # ----------------------------------------------------------------------
         self.queue: deque[CrawlTask] = deque()
-        self.visited: Set[str] = set()
+        self.visited: Vector[str] = Vector[str]()
         self.graph: LinkGraph = LinkGraph()
         self.crawled_pages: List[CrawledPage] = []
+        self.bst_index: BinarySearchTree[CrawledPage] = BinarySearchTree[CrawledPage]()
 
     def crawl(self) -> Tuple[List[CrawledPage], LinkGraph]:
         """
@@ -106,9 +110,9 @@ class WebCrawler:
             logger.error("Invalid seed URL provided. Aborting crawl.")
             return [], self.graph
 
-        # Initialize BFS: Enqueue seed and add to visited set
+        # Initialize BFS: Enqueue seed and add to visited vector
         self.queue.append(CrawlTask(url=self.seed_url, depth=0, parent_url=None))
-        self.visited.add(self.seed_url)
+        self.visited.push_back(self.seed_url)
         self.graph.add_node(self.seed_url)
 
         logger.info(f"Starting BFS crawl from seed: {self.seed_url}")
@@ -131,13 +135,15 @@ class WebCrawler:
                 f"[BFS Step {len(self.crawled_pages) + 1}/{self.max_pages}] Visiting (Depth {current_depth}): {current_url}"
             )
 
-            # Fetch page HTML
+            # Fetch page HTML with latency measurement for Dijkstra edge weights
+            t0 = time.time()
             html: Optional[str] = None
             if self.fetcher is not None:
                 if hasattr(self.fetcher, "fetch"):
                     html = self.fetcher.fetch(current_url)
                 elif callable(self.fetcher):
                     html = self.fetcher(current_url)
+            elapsed_ms = max(1.0, round((time.time() - t0) * 1000, 2))
 
             # Handle fetch failure (broken links, timeouts, disallowed by robots.txt)
             if html is None:
@@ -171,14 +177,14 @@ class WebCrawler:
                 if not is_same_domain(norm_link, self.seed_url):
                     continue
 
-                # Add directed edge in graph: current_url -> norm_link
-                self.graph.add_edge(current_url, norm_link)
+                # Add directed edge in graph with latency weight: current_url -> norm_link
+                self.graph.add_edge(current_url, norm_link, weight=elapsed_ms)
                 normalized_internal_links.append(norm_link)
 
-                # Check Visited Set (O(1) average lookup)
+                # Check Visited Vector (Linear Array contains / Linear Search - ECE 2103)
                 if norm_link not in self.visited:
                     # Mark as visited IMMEDIATELY upon discovery to prevent duplicate enqueuing
-                    self.visited.add(norm_link)
+                    self.visited.push_back(norm_link)
                     # FIFO Enqueue: Add to back of queue
                     self.queue.append(
                         CrawlTask(url=norm_link, depth=current_depth + 1, parent_url=current_url)
@@ -198,6 +204,8 @@ class WebCrawler:
                 extracted_data=text_blocks,  # backward compatibility
             )
             self.crawled_pages.append(crawled_record)
+            # Index page into Binary Search Tree (BST) lexicographically by URL
+            self.bst_index.insert(current_url, crawled_record)
 
         logger.info(f"Crawl finished. Total pages visited: {len(self.crawled_pages)}")
         return self.crawled_pages, self.graph

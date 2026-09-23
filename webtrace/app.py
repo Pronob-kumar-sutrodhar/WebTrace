@@ -18,7 +18,7 @@ import sys
 import time
 import webbrowser
 from dataclasses import asdict
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 # Ensure project root is in sys.path
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -50,6 +50,10 @@ else:
         template_folder=os.path.join(CURRENT_DIR, "templates"),
     )
 
+# Active crawl state for Dijkstra & BST queries (ECE 2103)
+LATEST_CRAWLER: Optional[WebCrawler] = None
+LATEST_GRAPH: Optional[LinkGraph] = None
+
 
 @app.after_request
 def add_cors_headers(response):
@@ -75,6 +79,8 @@ def api_crawl():
     API endpoint that accepts crawl parameters, executes the BFS crawler,
     and returns the collected pages, graph adjacency list, and crawl statistics.
     """
+    global LATEST_CRAWLER, LATEST_GRAPH
+
     data: Dict[str, Any] = request.get_json() or {}
 
     raw_seed = data.get("seed", "").strip()
@@ -97,6 +103,7 @@ def api_crawl():
         # Simulate crawl setup without network requests
         graph = LinkGraph()
         graph.add_node(canonical_seed)
+        LATEST_GRAPH = graph
         elapsed = time.time() - start_time
         return jsonify({
             "status": "success",
@@ -127,6 +134,8 @@ def api_crawl():
     )
 
     crawled_pages, graph = crawler.crawl()
+    LATEST_CRAWLER = crawler
+    LATEST_GRAPH = graph
     elapsed = time.time() - start_time
 
     # Export to disk for downloading
@@ -196,6 +205,72 @@ def download_json():
     if os.path.exists(json_file):
         return send_file(json_file, as_attachment=True, download_name="link_graph.json")
     return jsonify({"error": "No JSON data available yet. Please run a crawl first."}), 404
+
+
+@app.route("/api/graph/shortest-path", methods=["POST"])
+def api_shortest_path():
+    """
+    Computes the shortest path between two URLs in the crawled graph
+    using Dijkstra's Algorithm and a Min-Heap Priority Queue (ECE 2103).
+    """
+    global LATEST_GRAPH
+    if LATEST_GRAPH is None:
+        return jsonify({"status": "error", "message": "No graph available. Please run a crawl first."}), 404
+
+    data = request.get_json() or {}
+    start_url = data.get("start_url", "").strip()
+    target_url = data.get("target_url", "").strip()
+
+    if not start_url or not target_url:
+        return jsonify({"status": "error", "message": "Both 'start_url' and 'target_url' are required."}), 400
+
+    cost, path = LATEST_GRAPH.dijkstra_shortest_path(start_url, target_url)
+
+    if cost == float("inf"):
+        return jsonify({
+            "status": "not_found",
+            "message": f"No path found between '{start_url}' and '{target_url}'.",
+            "cost": None,
+            "path": [],
+        }), 200
+
+    return jsonify({
+        "status": "success",
+        "algorithm": "Dijkstra's Algorithm (Min-Heap Priority Queue)",
+        "cost": cost,
+        "path": path,
+        "hops": len(path) - 1,
+    })
+
+
+@app.route("/api/pages/bst-inorder", methods=["GET"])
+def api_bst_inorder():
+    """
+    Returns crawled pages sorted lexicographically by URL using
+    Binary Search Tree (BST) In-Order Traversal (ECE 2103).
+    """
+    global LATEST_CRAWLER
+    if LATEST_CRAWLER is None or LATEST_CRAWLER.bst_index.count == 0:
+        return jsonify({"status": "error", "message": "No crawled data in BST index. Please run a crawl first."}), 404
+
+    sorted_items = LATEST_CRAWLER.bst_index.inorder_traversal()
+    result = [
+        {
+            "url": page.url,
+            "title": page.title,
+            "depth": page.depth,
+            "outgoing_count": page.outgoing_count,
+        }
+        for _, page in sorted_items
+    ]
+
+    return jsonify({
+        "status": "success",
+        "total_nodes": len(result),
+        "tree_height": LATEST_CRAWLER.bst_index.height(),
+        "traversal": "In-Order (Left -> Root -> Right)",
+        "pages": result,
+    })
 
 
 def run_app(host: str = "127.0.0.1", port: int = 5000, open_browser: bool = True):

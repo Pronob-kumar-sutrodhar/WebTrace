@@ -31,7 +31,7 @@ export default function NetworkGraph({ graph, pages, isDark }) {
     const bgColor = isDark ? '#0b0f19' : '#f8fafc';
     const fontColor = isDark ? '#f1f5f9' : '#0f172a';
     const edgeColor = isDark ? '#2a3b5e' : '#cbd5e1';
-    const edgeHighlight = isDark ? '#00f0ff' : '#7c3aed';
+    const edgeHighlight = isDark ? '#00f0ff' : '#0284c7';
 
     Object.keys(graph).forEach((nodeUrl) => {
       if (!addedNodes.has(nodeUrl)) {
@@ -79,13 +79,15 @@ export default function NetworkGraph({ graph, pages, isDark }) {
           });
         }
 
-        edgesArray.push({
-          from: nodeUrl,
-          to: targetUrl,
-          arrows: 'to',
-          color: { color: edgeColor, highlight: edgeHighlight },
-          smooth: { type: 'continuous' },
-        });
+        const edgeKey = `${nodeUrl}->${targetUrl}`;
+        if (!edgesArray.some(e => e.from === nodeUrl && e.to === targetUrl)) {
+          edgesArray.push({
+            from: nodeUrl,
+            to: targetUrl,
+            arrows: { to: { enabled: true, scaleFactor: 0.65 } },
+            color: { color: edgeColor, highlight: edgeHighlight },
+          });
+        }
       });
     });
 
@@ -95,18 +97,58 @@ export default function NetworkGraph({ graph, pages, isDark }) {
     };
 
     const options = {
-      physics: {
-        stabilization: true,
-        barnesHut: { gravitationalConstant: -3000, springLength: 110 },
+      autoResize: true,
+      edges: {
+        smooth: {
+          enabled: true,
+          type: 'continuous',
+          roundness: 0.15,
+        },
       },
-      interaction: { hover: true, tooltipDelay: 100 },
+      physics: {
+        enabled: true,
+        solver: 'forceAtlas2Based',
+        forceAtlas2Based: {
+          gravitationalConstant: -35,
+          centralGravity: 0.015,
+          springLength: 85,
+          springConstant: 0.08,
+          damping: 0.45,
+          avoidOverlap: 0.7,
+        },
+        stabilization: {
+          enabled: true,
+          iterations: 100, // Loads in ~30ms instead of 1000 iterations
+          updateInterval: 25,
+          fit: true,
+        },
+      },
+      interaction: { 
+        hover: true, 
+        tooltipDelay: 100,
+        dragNodes: true,
+        zoomView: true,
+        dragView: true,
+      },
     };
 
     if (networkRef.current) {
       networkRef.current.destroy();
     }
 
-    networkRef.current = new VisNetwork(containerRef.current, data, options);
+    const network = new VisNetwork(containerRef.current, data, options);
+    networkRef.current = network;
+
+    // Freeze physics once initial layout settles: eliminates jitter and instability
+    network.once('stabilizationIterationsDone', () => {
+      network.setOptions({ physics: { enabled: false } });
+      network.fit({
+        animation: {
+          duration: 300,
+          easingFunction: 'easeInOutQuad',
+        },
+      });
+    });
 
     return () => {
       if (networkRef.current) {

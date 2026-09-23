@@ -30,7 +30,7 @@ export default function CrawlForm({ onStartCrawl, isLoading }) {
     <section className="relative overflow-hidden bg-cyber-card/90 border border-cyber-border rounded-2xl p-6 shadow-xl backdrop-blur-md transition-all">
       
       {/* Decorative Circuit Board Accents */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-violet-500/10 to-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500/15 to-blue-500/10 rounded-full blur-2xl pointer-events-none" />
       <div className="absolute top-4 right-4 flex items-center gap-1.5 opacity-40 text-cyan-400 font-pixel text-[9px] pointer-events-none">
         <span>+</span><span>+</span><span>+</span>
       </div>
@@ -39,7 +39,7 @@ export default function CrawlForm({ onStartCrawl, isLoading }) {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="font-pixel text-[11px] text-cyan-400 tracking-wide uppercase flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-violet-400" />
+              <Cpu className="w-3.5 h-3.5 text-cyan-400" />
               CRAWL CONTROLLER
             </span>
           </div>
@@ -153,7 +153,7 @@ export default function CrawlForm({ onStartCrawl, isLoading }) {
                 type="checkbox" 
                 checked={respectRobots}
                 onChange={(e) => setRespectRobots(e.target.checked)}
-                className="rounded border-cyber-border text-violet-600 focus:ring-violet-500 bg-cyber-bg"
+                className="rounded border-cyber-border text-cyan-500 focus:ring-cyan-400 bg-cyber-bg"
               />
               <span>Respect <code className="text-[11px] font-mono bg-cyber-surface px-1.5 py-0.5 rounded text-cyan-300 border border-cyber-border">robots.txt</code></span>
             </label>
@@ -162,19 +162,19 @@ export default function CrawlForm({ onStartCrawl, isLoading }) {
                 type="checkbox" 
                 checked={dryRun}
                 onChange={(e) => setDryRun(e.target.checked)}
-                className="rounded border-cyber-border text-violet-600 focus:ring-violet-500 bg-cyber-bg"
+                className="rounded border-cyber-border text-cyan-500 focus:ring-cyan-400 bg-cyber-bg"
               />
               <span>Dry-Run Mode</span>
             </label>
           </div>
 
-          {/* Vibrant Cyber Violet Pill Button (from design image) */}
+          {/* Primary Cyan Pill Button matching original app color */}
           <button 
             type="submit" 
             disabled={isLoading}
-            className="px-6 py-2.5 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-xs rounded-full shadow-lg shadow-violet-600/30 hover:shadow-violet-600/50 transition flex items-center gap-2.5 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider"
+            className="px-6 py-2.5 bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-300 hover:to-cyan-400 text-slate-950 font-bold text-xs rounded-full shadow-lg shadow-cyan-400/30 hover:shadow-cyan-400/50 transition flex items-center gap-2.5 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider"
           >
-            <Play className="w-3.5 h-3.5 fill-current text-white" />
+            <Play className="w-3.5 h-3.5 fill-current text-slate-950" />
             <span>{isLoading ? 'Crawling...' : 'Start BFS Crawl'}</span>
           </button>
         </div>

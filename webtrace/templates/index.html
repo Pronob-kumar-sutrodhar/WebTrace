@@ -655,35 +655,62 @@
                         });
                     }
 
-                    edgesArray.push({
-                        from: nodeUrl,
-                        to: targetUrl,
-                        arrows: 'to',
-                        color: { color: edgeColor, highlight: edgeHighlight },
-                        smooth: { type: 'continuous' }
+                        const edgeKey = `${nodeUrl}->${targetUrl}`;
+                        if (!edgesArray.some(e => e.from === nodeUrl && e.to === targetUrl)) {
+                            edgesArray.push({
+                                from: nodeUrl,
+                                to: targetUrl,
+                                arrows: { to: { enabled: true, scaleFactor: 0.65 } },
+                                color: { color: edgeColor, highlight: edgeHighlight }
+                            });
+                        }
                     });
                 });
-            });
 
-            container.style.backgroundColor = bgColor;
+                container.style.backgroundColor = bgColor;
 
-            const data = {
-                nodes: new vis.DataSet(nodesArray),
-                edges: new vis.DataSet(edgesArray)
-            };
+                const data = {
+                    nodes: new vis.DataSet(nodesArray),
+                    edges: new vis.DataSet(edgesArray)
+                };
 
-            const options = {
-                physics: {
-                    stabilization: true,
-                    barnesHut: { gravitationalConstant: -2800, springLength: 100 }
-                },
-                interaction: { hover: true, tooltipDelay: 100 }
-            };
+                const options = {
+                    edges: {
+                        smooth: {
+                            enabled: true,
+                            type: 'continuous',
+                            roundness: 0.15
+                        }
+                    },
+                    physics: {
+                        enabled: true,
+                        solver: 'forceAtlas2Based',
+                        forceAtlas2Based: {
+                            gravitationalConstant: -35,
+                            centralGravity: 0.015,
+                            springLength: 85,
+                            springConstant: 0.08,
+                            damping: 0.45,
+                            avoidOverlap: 0.7
+                        },
+                        stabilization: {
+                            enabled: true,
+                            iterations: 100,
+                            updateInterval: 25,
+                            fit: true
+                        }
+                    },
+                    interaction: { hover: true, tooltipDelay: 100, dragNodes: true, zoomView: true, dragView: true }
+                };
 
-            if (networkInstance) {
-                networkInstance.destroy();
-            }
-            networkInstance = new vis.Network(container, data, options);
+                if (networkInstance) {
+                    networkInstance.destroy();
+                }
+                networkInstance = new vis.Network(container, data, options);
+                networkInstance.once('stabilizationIterationsDone', function () {
+                    networkInstance.setOptions({ physics: { enabled: false } });
+                    networkInstance.fit({ animation: { duration: 300, easingFunction: 'easeInOutQuad' } });
+                });
         }
 
         function shortenUrl(url) {

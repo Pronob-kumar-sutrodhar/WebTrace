@@ -93,7 +93,7 @@ export default function App() {
             <div className="inline-block animate-spin text-cyan-400">
               <Loader2 className="w-8 h-8" />
             </div>
-            <h3 className="text-sm font-semibold font-pixel text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-300">
+            <h3 className="text-sm font-semibold font-pixel text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-cyan-200">
               EXECUTING BFS CRAWL...
             </h3>
             <p className="text-xs text-slate-400 max-w-sm mx-auto font-sans">
@@ -164,7 +164,7 @@ export default function App() {
                         : 'border-transparent text-slate-400 hover:text-slate-200'
                     }`}
                   >
-                    <Network className="w-4 h-4 text-violet-400" />
+                    <Network className="w-4 h-4 text-cyan-400" />
                     <span>Visual Link Graph</span>
                   </button>
 
@@ -177,7 +177,7 @@ export default function App() {
                         : 'border-transparent text-slate-400 hover:text-slate-200'
                     }`}
                   >
-                    <Code2 className="w-4 h-4 text-purple-400" />
+                    <Code2 className="w-4 h-4 text-cyan-400" />
                     <span>Adjacency List (JSON)</span>
                   </button>
                 </div>
@@ -227,11 +227,11 @@ export default function App() {
       {/* Clean Cyber Footer */}
       <footer className="border-t border-cyber-border/70 bg-[#0e1424]/90 py-4 text-center text-xs text-slate-400 transition-colors">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-          <span className="font-pixel text-[11px] text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-300">
+          <span className="font-pixel text-[11px] text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-300">
             WEBTRACE
           </span>
           <span className="font-mono text-[11px] text-slate-500">
-            Domain-Restricted BFS Crawler
+            WebTrace
           </span>
         </div>
       </footer>
